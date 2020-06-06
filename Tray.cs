@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Diagnostics;
 using static SteamCloudMusic.User32;
 
 namespace SteamCloudMusic
@@ -58,7 +59,7 @@ namespace SteamCloudMusic
                 results.Add(new Tuple<string, string>(procName, text));
             }
         }
-        static public List<Tuple<string, string>> GetTrayIcons()
+        static public List<Tuple<string, string>> GetCollapsedTrayIcons()
         {
 
             List<Tuple<string, string>> r = new List<Tuple<string, string>>();
@@ -69,8 +70,29 @@ namespace SteamCloudMusic
                 hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
                 GetIconFromTB(hWndTray, ref r);
             }
+            return r;
+        }
+        static public List<Tuple<string, string>> GetTaskbarIcons()
+        {
 
-            hWndTray = FindWindow("Shell_TrayWnd", null);
+            List<Tuple<string, string>> r = new List<Tuple<string, string>>();
+            Process[] processlist = Process.GetProcesses();
+
+            // Iterate over them
+            foreach (Process process in processlist)
+            {
+                if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    r.Add(new Tuple<string, string>(process.ProcessName, process.MainWindowTitle));
+                }
+            }
+            return r;
+        }
+        static public List<Tuple<string, string>> GetTrayIcons()
+        {
+
+            List<Tuple<string, string>> r = new List<Tuple<string, string>>();
+            IntPtr hWndTray = FindWindow("Shell_TrayWnd", null);
 
             if (hWndTray != IntPtr.Zero)
             {

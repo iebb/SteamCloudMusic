@@ -50,7 +50,7 @@ namespace SteamCloudMusic
             }
             else
             {
-                labelStatus.Text = text;
+                labelStatus.Text = text.Replace("\n", "\\n").Replace("\r", "\\r");
                 labelStatus.ForeColor = color;
                 Console.WriteLine(text);
             }
@@ -89,13 +89,11 @@ namespace SteamCloudMusic
                 FileSize = machineAuth.BytesToWrite,
                 Offset = machineAuth.Offset,
 
-                SentryFileHash = hash, // should be the sha1 hash of the sentry file we just wrote
-
-                OneTimePassword = machineAuth.OneTimePassword, // not sure on this one yet, since we've had no examples of steam using OTPs
-
-                LastError = 0, // result from win32 GetLastError
-                Result = EResult.OK, // if everything went okay, otherwise ~who knows~
-                JobID = machineAuth.JobID, // so we respond to the correct server job
+                SentryFileHash = hash,
+                OneTimePassword = machineAuth.OneTimePassword,
+                LastError = 0,
+                Result = EResult.OK,
+                JobID = machineAuth.JobID,
             };
 
             // send off our response
@@ -105,12 +103,34 @@ namespace SteamCloudMusic
 
         string getTray(string process)
         {
-            List<Tuple<string, string>> t = Tray.GetTrayIcons();
-            foreach (Tuple<string, string> i in t)
+            if (chkTray.Checked)
             {
-                if (i.Item1 == process)
+                foreach (var i in Tray.GetTrayIcons())
                 {
-                    return i.Item2;
+                    if (i.Item1.ToLower() == process.ToLower() && i.Item2.Length > 0)
+                    {
+                        return i.Item2;
+                    }
+                }
+            }
+            if (chkCollapse.Checked)
+            {
+                foreach (var i in Tray.GetCollapsedTrayIcons())
+                {
+                    if (i.Item1.ToLower() == process.ToLower() && i.Item2.Length > 0)
+                    {
+                        return i.Item2;
+                    }
+                }
+            }
+            if (chktaskbar.Checked)
+            {
+                foreach (var i in Tray.GetTaskbarIcons())
+                {
+                    if (i.Item1.ToLower() == process.ToLower() && i.Item2.Length > 0)
+                    {
+                        return i.Item2;
+                    }
                 }
             }
             return "";
@@ -200,12 +220,13 @@ namespace SteamCloudMusic
 
                 try
                 {
-                    if (loggedIn)
+                    var tray = getTray(txtProcess.Text);
+                    labelStatusBar.Text = tray.Replace("\n", "\\n").Replace("\r", "\\r");
+                    if (tray.Length > 0)
                     {
-                        var tray = getTray(txtProcess.Text);
-                        if (tray.Length > 0)
+                        var presence = Regex.Replace(tray, txtPattern.Text, txtRepl.Text);
+                        if (loggedIn)
                         {
-                            var presence = Regex.Replace(tray, txtPattern.Text, txtRepl.Text);
                             if (presence != lastPresence)
                             {
                                 friends.SetPersonaState(EPersonaState.Busy);
