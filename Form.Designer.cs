@@ -57,6 +57,7 @@
             this.lblNickname = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblSteamID = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.panelLogin.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -400,12 +401,28 @@
             this.lblSteamID.Size = new System.Drawing.Size(0, 19);
             this.lblSteamID.TabIndex = 5;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.BackColor = System.Drawing.Color.White;
+            this.linkLabel1.ForeColor = System.Drawing.Color.Black;
+            this.linkLabel1.Location = new System.Drawing.Point(381, 317);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(41, 12);
+            this.linkLabel1.TabIndex = 20;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Github";
+            this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(50)))));
             this.ClientSize = new System.Drawing.Size(434, 329);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.panelLoggedIn);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.statusStrip1);
@@ -462,6 +479,7 @@
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.CheckBox chkSavePasswd;
         private System.Windows.Forms.Label lblSteamID;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 
