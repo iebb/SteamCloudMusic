@@ -24,4 +24,6 @@ and a lot more...
 ----
 ### Credit
 
+https://github.com/SteamRE/SteamKit
+
 App Icon made by Freepik from www.flaticon.com
