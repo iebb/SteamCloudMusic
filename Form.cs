@@ -19,6 +19,7 @@ namespace SteamCloudMusic
     public partial class Form : System.Windows.Forms.Form
     {
         public SteamClient client;
+        public SteamConfiguration cfg;
         public CallbackManager cb;
         public SteamUser user;
         public SteamFriends friends;
@@ -29,13 +30,26 @@ namespace SteamCloudMusic
         private bool loggedIn = false;
         private bool loop = false;
         private bool initialized = false;
+        private string steamNickname = "";
         private string lastPresence = "";
 
-        private delegate void SafeCallDelegate(string text, Color color);
+        private delegate void SafeCallDelegateStringColor(string a, Color b);
+        private delegate void SafeCallDelegate();
 
-        static Color defaultColor = Color.FromArgb(0, 255, 0);
-
-
+        void UpdateState()
+        {
+            if (this.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(UpdateState);
+                this.Invoke(d);
+            }
+            else
+            {
+                panelLoggedIn.Visible = loggedIn;
+                panelLogin.Visible = !loggedIn;
+                lblNickname.Text = steamNickname;
+            }
+        }
 
         void Log(string text)
         {
@@ -45,7 +59,7 @@ namespace SteamCloudMusic
         {
             if (labelStatus.InvokeRequired)
             {
-                var d = new SafeCallDelegate(Log);
+                var d = new SafeCallDelegateStringColor(Log);
                 labelStatus.Invoke(d, new object[] { text, color });
             }
             else
@@ -63,6 +77,7 @@ namespace SteamCloudMusic
             cb = new CallbackManager(client);
             user = client.GetHandler<SteamUser>();
             friends = client.GetHandler<SteamFriends>();
+            initCallback();
         }
 
 
@@ -100,6 +115,106 @@ namespace SteamCloudMusic
             user.SendMachineAuthResponse(authResponse);
         }
 
+        class Listener : IDebugListener
+        {
+            public Form f;
+            public Listener(Form fm)
+            {
+                f = fm;
+            }
+            public void WriteLine(string category, string msg)
+            {
+                Console.WriteLine("{0}: {1}", category, msg);
+                f.Log(msg);
+            }
+        }
+
+        void initCallback()
+        {
+
+            DebugLog.AddListener(new Listener(this));
+            DebugLog.Enabled = true;
+
+            cb.Subscribe<SteamClient.ConnectedCallback>(callback =>
+            {
+                Log("Steam server connected", Color.LightGreen);
+                UpdateState();
+                user.LogOn(logon);
+            });
+
+            cb.Subscribe<SteamClient.DisconnectedCallback>(callback =>
+            {
+                Log("Steam server disconnected", Color.LightSalmon);
+                loggedIn = false;
+                loop = false;
+                UpdateState();
+                if (loop)
+                {
+                    client.Connect();
+                }
+            });
+
+            cb.Subscribe<SteamUser.LoggedOffCallback>(callback =>
+            {
+                Log("User logged off", Color.LightSalmon);
+                loggedIn = false;
+                loop = false;
+                UpdateState();
+            });
+
+            cb.Subscribe<SteamUser.UpdateMachineAuthCallback>(
+                authCallback => OnUpdateMachineAuthCallback(authCallback)
+            );
+
+            cb.Subscribe<SteamUser.LoggedOnCallback>(callback =>
+            {
+
+                Log(String.Format("Logged On Callback: {0}", callback.Result), Color.Yellow);
+
+                if (callback.Result == EResult.OK)
+                {
+                    Log("LoggedOnCallback: ok", Color.LightGreen);
+                    loggedIn = true;
+                    steamNickname = friends.GetPersonaName();
+                    UpdateState();
+                }
+                else
+                {
+                    Log(String.Format("Login Error: {0}", callback.Result), Color.Yellow);
+                    if (callback.Result == EResult.AccountLoginDeniedNeedTwoFactor)
+                    {
+                        Log("AccountLoginDeniedNeedTwoFactor", Color.Yellow);
+                        worker.CancelAsync();
+                    }
+                    else if (callback.Result == EResult.TwoFactorCodeMismatch)
+                    {
+                        Log("TwoFactorCodeMismatch", Color.Yellow);
+                        worker.CancelAsync();
+                    }
+                    else if (callback.Result == EResult.AccountLogonDenied)
+                    {
+                        Log("This account is SteamGuard enabled. Enter the code via the `auth' command.", Color.Yellow);
+                        worker.CancelAsync();
+                    }
+                    else if (callback.Result == EResult.InvalidLoginAuthCode)
+                    {
+                        Log("The given SteamGuard code was invalid. Try again using the `auth' command.", Color.Yellow);
+                        worker.CancelAsync();
+                    }
+                    worker.CancelAsync();
+                }
+
+            });
+
+
+            if (!worker.IsBusy)
+            {
+                worker.DoWork += doWork;
+                worker.RunWorkerAsync();
+                initialized = true;
+            }
+
+        }
 
         string getTray(string process)
         {
@@ -139,66 +254,6 @@ namespace SteamCloudMusic
         void doWork(object sender, DoWorkEventArgs e)
         {
             loop = true;
-
-            cb.Subscribe<SteamClient.ConnectedCallback>(callback =>
-            {
-                user.LogOn(logon);
-            });
-
-            cb.Subscribe<SteamClient.DisconnectedCallback>(callback =>
-            {
-                if (loop)
-                {
-                    client.Connect();
-                }
-            });
-
-            cb.Subscribe<SteamUser.LoggedOffCallback>(callback =>
-            {
-                loggedIn = false;
-                loop = false;
-            });
-
-            cb.Subscribe<SteamUser.UpdateMachineAuthCallback>(
-                authCallback => OnUpdateMachineAuthCallback(authCallback)
-            );
-
-            cb.Subscribe<SteamUser.LoggedOnCallback>(callback =>
-            {
-                Log(String.Format("Logged On Callback: {0}", callback.Result), Color.Yellow);
-
-                if (callback.Result == EResult.OK)
-                {
-                    Log("LoggedOnCallback: ok", Color.LightGreen);
-                    loggedIn = true;
-                }
-                else
-                {
-                    Log(String.Format("Login Error: {0}", callback.Result), Color.Yellow);
-                    if (callback.Result == EResult.AccountLoginDeniedNeedTwoFactor)
-                    {
-                        Log("AccountLoginDeniedNeedTwoFactor", Color.Yellow);
-                        worker.CancelAsync();
-                    }
-                    else if (callback.Result == EResult.TwoFactorCodeMismatch)
-                    {
-                        Log("TwoFactorCodeMismatch", Color.Yellow);
-                        worker.CancelAsync();
-                    }
-                    else if (callback.Result == EResult.AccountLogonDenied)
-                    {
-                        Log("This account is SteamGuard enabled. Enter the code via the `auth' command.", Color.Yellow);
-                        worker.CancelAsync();
-                    }
-                    else if (callback.Result == EResult.InvalidLoginAuthCode)
-                    {
-                        Log("The given SteamGuard code was invalid. Try again using the `auth' command.", Color.Yellow);
-                        worker.CancelAsync();
-                    }
-                    worker.CancelAsync();
-                }
-
-            });
 
             while (true)
             {
@@ -253,13 +308,7 @@ namespace SteamCloudMusic
 
         void LogOn()
         {
-            client.Connect(
-                ServerRecord.CreateSocketServer(new IPEndPoint(IPAddress.Parse("203.80.149.67"), 27017))
-            );
-            worker.DoWork += doWork;
-            worker.RunWorkerAsync();
-            initialized = true;
-
+            client.Connect();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -281,6 +330,7 @@ namespace SteamCloudMusic
                 logon.SentryFileHash = null;
 
             LogOn();
+            UpdateState();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -291,5 +341,14 @@ namespace SteamCloudMusic
                 worker.CancelAsync();
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            loggedIn = false;
+            loop = false;
+            client.Disconnect();
+            UpdateState();
+        }
+
     }
 }

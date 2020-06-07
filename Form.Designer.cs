@@ -31,12 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLogin = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txt2FA = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelLogin = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.chktaskbar = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -48,13 +48,17 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtRepl = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
+            this.panelLoggedIn = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.lblNickname = new System.Windows.Forms.Label();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.panelLogin.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.panelLoggedIn.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtUserName
@@ -79,17 +83,17 @@
             this.lblName.TabIndex = 1;
             this.lblName.Text = "Username";
             // 
-            // button1
+            // btnLogin
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(284, 67);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(116, 37);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Log In";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnLogin.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogin.Location = new System.Drawing.Point(284, 67);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(116, 37);
+            this.btnLogin.TabIndex = 4;
+            this.btnLogin.Text = "Log In";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtPassword
             // 
@@ -137,22 +141,22 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "2FA";
             // 
-            // panel1
+            // panelLogin
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.txt2FA);
-            this.panel1.Controls.Add(this.txtUserName);
-            this.panel1.Controls.Add(this.lblName);
-            this.panel1.Controls.Add(this.txtPassword);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(12, 9);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(410, 114);
-            this.panel1.TabIndex = 14;
+            this.panelLogin.Controls.Add(this.label2);
+            this.panelLogin.Controls.Add(this.txt2FA);
+            this.panelLogin.Controls.Add(this.txtUserName);
+            this.panelLogin.Controls.Add(this.lblName);
+            this.panelLogin.Controls.Add(this.txtPassword);
+            this.panelLogin.Controls.Add(this.label1);
+            this.panelLogin.Controls.Add(this.btnLogin);
+            this.panelLogin.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelLogin.Location = new System.Drawing.Point(11, 9);
+            this.panelLogin.Name = "panelLogin";
+            this.panelLogin.Size = new System.Drawing.Size(410, 114);
+            this.panelLogin.TabIndex = 14;
             // 
             // panel2
             // 
@@ -294,23 +298,12 @@
             this.txtRepl.TabIndex = 17;
             this.txtRepl.Text = "♫ $1";
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(12, 306);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 17);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "STATUS";
-            // 
             // statusStrip1
             // 
             this.statusStrip1.BackColor = System.Drawing.Color.White;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelStatusBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 310);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 307);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(434, 22);
             this.statusStrip1.TabIndex = 17;
@@ -329,21 +322,68 @@
             this.labelStatus.ForeColor = System.Drawing.Color.White;
             this.labelStatus.Location = new System.Drawing.Point(15, 272);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(43, 17);
+            this.labelStatus.Size = new System.Drawing.Size(138, 17);
             this.labelStatus.TabIndex = 7;
-            this.labelStatus.Text = "Status";
+            this.labelStatus.Text = "Connecting to Steam...";
+            // 
+            // panelLoggedIn
+            // 
+            this.panelLoggedIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelLoggedIn.Controls.Add(this.label9);
+            this.panelLoggedIn.Controls.Add(this.lblNickname);
+            this.panelLoggedIn.Controls.Add(this.btnLogout);
+            this.panelLoggedIn.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelLoggedIn.Location = new System.Drawing.Point(11, 9);
+            this.panelLoggedIn.Name = "panelLoggedIn";
+            this.panelLoggedIn.Size = new System.Drawing.Size(410, 114);
+            this.panelLoggedIn.TabIndex = 19;
+            this.panelLoggedIn.Visible = false;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(3, 15);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(87, 19);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Logged in as";
+            // 
+            // lblNickname
+            // 
+            this.lblNickname.AutoSize = true;
+            this.lblNickname.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblNickname.ForeColor = System.Drawing.Color.White;
+            this.lblNickname.Location = new System.Drawing.Point(93, 15);
+            this.lblNickname.Name = "lblNickname";
+            this.lblNickname.Size = new System.Drawing.Size(0, 19);
+            this.lblNickname.TabIndex = 3;
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.Location = new System.Drawing.Point(284, 67);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(116, 37);
+            this.btnLogout.TabIndex = 4;
+            this.btnLogout.Text = "Log Out";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(50)))));
-            this.ClientSize = new System.Drawing.Size(434, 332);
+            this.ClientSize = new System.Drawing.Size(434, 329);
+            this.Controls.Add(this.panelLoggedIn);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.panelLogin);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -352,12 +392,14 @@
             this.Opacity = 0.97D;
             this.Text = "SteamCloudMusic";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panelLogin.ResumeLayout(false);
+            this.panelLogin.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.panelLoggedIn.ResumeLayout(false);
+            this.panelLoggedIn.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -367,12 +409,12 @@
 
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txt2FA;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelLogin;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox txtProcess;
         private System.Windows.Forms.Label label3;
@@ -384,10 +426,13 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkCollapse;
         private System.Windows.Forms.CheckBox chkTray;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel labelStatusBar;
         private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Panel panelLoggedIn;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label lblNickname;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 
