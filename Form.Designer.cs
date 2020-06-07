@@ -37,8 +37,9 @@
             this.txt2FA = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panelLogin = new System.Windows.Forms.Panel();
+            this.chkSavePasswd = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.chktaskbar = new System.Windows.Forms.CheckBox();
+            this.chkTaskbar = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.chkCollapse = new System.Windows.Forms.CheckBox();
             this.chkTray = new System.Windows.Forms.CheckBox();
@@ -55,6 +56,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.lblNickname = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
+            this.lblSteamID = new System.Windows.Forms.Label();
             this.panelLogin.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -103,6 +105,7 @@
             this.txtPassword.ForeColor = System.Drawing.Color.White;
             this.txtPassword.Location = new System.Drawing.Point(78, 40);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(322, 25);
             this.txtPassword.TabIndex = 2;
             // 
@@ -122,12 +125,12 @@
             this.txt2FA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(50)))));
             this.txt2FA.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt2FA.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txt2FA.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.txt2FA.Font = new System.Drawing.Font("Segoe UI", 9.25F);
             this.txt2FA.ForeColor = System.Drawing.Color.White;
             this.txt2FA.Location = new System.Drawing.Point(78, 67);
             this.txt2FA.MaxLength = 5;
             this.txt2FA.Name = "txt2FA";
-            this.txt2FA.Size = new System.Drawing.Size(113, 32);
+            this.txt2FA.Size = new System.Drawing.Size(113, 24);
             this.txt2FA.TabIndex = 5;
             // 
             // label2
@@ -145,6 +148,7 @@
             // 
             this.panelLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelLogin.Controls.Add(this.chkSavePasswd);
             this.panelLogin.Controls.Add(this.label2);
             this.panelLogin.Controls.Add(this.txt2FA);
             this.panelLogin.Controls.Add(this.txtUserName);
@@ -155,12 +159,24 @@
             this.panelLogin.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelLogin.Location = new System.Drawing.Point(11, 9);
             this.panelLogin.Name = "panelLogin";
-            this.panelLogin.Size = new System.Drawing.Size(410, 114);
+            this.panelLogin.Size = new System.Drawing.Size(410, 124);
             this.panelLogin.TabIndex = 14;
+            // 
+            // chkSavePasswd
+            // 
+            this.chkSavePasswd.AutoSize = true;
+            this.chkSavePasswd.ForeColor = System.Drawing.Color.White;
+            this.chkSavePasswd.Location = new System.Drawing.Point(7, 97);
+            this.chkSavePasswd.Name = "chkSavePasswd";
+            this.chkSavePasswd.Size = new System.Drawing.Size(114, 21);
+            this.chkSavePasswd.TabIndex = 7;
+            this.chkSavePasswd.Text = "Save Password";
+            this.chkSavePasswd.UseVisualStyleBackColor = true;
+            this.chkSavePasswd.CheckedChanged += new System.EventHandler(this.chkSavePasswd_CheckedChanged);
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.chktaskbar);
+            this.panel2.Controls.Add(this.chkTaskbar);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.chkCollapse);
             this.panel2.Controls.Add(this.chkTray);
@@ -171,24 +187,24 @@
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.txtRepl);
             this.panel2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel2.Location = new System.Drawing.Point(12, 129);
+            this.panel2.Location = new System.Drawing.Point(12, 139);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(409, 128);
             this.panel2.TabIndex = 15;
             // 
-            // chktaskbar
+            // chkTaskbar
             // 
-            this.chktaskbar.AutoSize = true;
-            this.chktaskbar.Checked = true;
-            this.chktaskbar.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chktaskbar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chktaskbar.ForeColor = System.Drawing.Color.White;
-            this.chktaskbar.Location = new System.Drawing.Point(226, 11);
-            this.chktaskbar.Name = "chktaskbar";
-            this.chktaskbar.Size = new System.Drawing.Size(72, 21);
-            this.chktaskbar.TabIndex = 22;
-            this.chktaskbar.Text = "Taskbar";
-            this.chktaskbar.UseVisualStyleBackColor = true;
+            this.chkTaskbar.AutoSize = true;
+            this.chkTaskbar.Checked = true;
+            this.chkTaskbar.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTaskbar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkTaskbar.ForeColor = System.Drawing.Color.White;
+            this.chkTaskbar.Location = new System.Drawing.Point(226, 11);
+            this.chkTaskbar.Name = "chkTaskbar";
+            this.chkTaskbar.Size = new System.Drawing.Size(72, 21);
+            this.chkTaskbar.TabIndex = 22;
+            this.chkTaskbar.Text = "Taskbar";
+            this.chkTaskbar.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -330,13 +346,14 @@
             // 
             this.panelLoggedIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelLoggedIn.Controls.Add(this.lblSteamID);
             this.panelLoggedIn.Controls.Add(this.label9);
             this.panelLoggedIn.Controls.Add(this.lblNickname);
             this.panelLoggedIn.Controls.Add(this.btnLogout);
             this.panelLoggedIn.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelLoggedIn.Location = new System.Drawing.Point(11, 9);
             this.panelLoggedIn.Name = "panelLoggedIn";
-            this.panelLoggedIn.Size = new System.Drawing.Size(410, 114);
+            this.panelLoggedIn.Size = new System.Drawing.Size(410, 118);
             this.panelLoggedIn.TabIndex = 19;
             this.panelLoggedIn.Visible = false;
             // 
@@ -356,7 +373,7 @@
             this.lblNickname.AutoSize = true;
             this.lblNickname.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.lblNickname.ForeColor = System.Drawing.Color.White;
-            this.lblNickname.Location = new System.Drawing.Point(93, 15);
+            this.lblNickname.Location = new System.Drawing.Point(101, 15);
             this.lblNickname.Name = "lblNickname";
             this.lblNickname.Size = new System.Drawing.Size(0, 19);
             this.lblNickname.TabIndex = 3;
@@ -372,6 +389,16 @@
             this.btnLogout.Text = "Log Out";
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // lblSteamID
+            // 
+            this.lblSteamID.AutoSize = true;
+            this.lblSteamID.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblSteamID.ForeColor = System.Drawing.Color.White;
+            this.lblSteamID.Location = new System.Drawing.Point(101, 45);
+            this.lblSteamID.Name = "lblSteamID";
+            this.lblSteamID.Size = new System.Drawing.Size(0, 19);
+            this.lblSteamID.TabIndex = 5;
             // 
             // Form
             // 
@@ -422,7 +449,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtRepl;
-        private System.Windows.Forms.CheckBox chktaskbar;
+        private System.Windows.Forms.CheckBox chkTaskbar;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox chkCollapse;
         private System.Windows.Forms.CheckBox chkTray;
@@ -433,6 +460,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lblNickname;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.CheckBox chkSavePasswd;
+        private System.Windows.Forms.Label lblSteamID;
     }
 }
 

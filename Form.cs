@@ -31,6 +31,7 @@ namespace SteamCloudMusic
         private bool loop = false;
         private bool initialized = false;
         private string steamNickname = "";
+        private string steamID = "";
         private string lastPresence = "";
 
         private delegate void SafeCallDelegateStringColor(string a, Color b);
@@ -48,7 +49,46 @@ namespace SteamCloudMusic
                 panelLoggedIn.Visible = loggedIn;
                 panelLogin.Visible = !loggedIn;
                 lblNickname.Text = steamNickname;
+                lblSteamID.Text = steamID;
             }
+        }
+
+        void SaveConfig()
+        {
+            Config c = new Config();
+            if (chkSavePasswd.Checked)
+            {
+                c.SetUserPass(txtUserName.Text, txtPassword.Text);
+                c.save_passwd = true;
+            }
+            else
+            {
+                c.username = txtUserName.Text;
+                c.save_passwd = false;
+            }
+            c.pattern = txtPattern.Text;
+            c.process = txtProcess.Text;
+            c.replacement = txtRepl.Text;
+            c.find_flag = 0;
+            if (chkCollapse.Checked) c.find_flag |= Config.FIND_TRAY_COLLAPSED;
+            if (chkTray.Checked) c.find_flag |= Config.FIND_TRAY;
+            if (chkTaskbar.Checked) c.find_flag |= Config.FIND_TASKBAR;
+            c.Save();
+        }
+        void LoadConfig()
+        {
+            Config c = Config.Load();
+            txtUserName.Text = c.username;
+            txtPassword.Text = c.GetPass();
+            chkSavePasswd.Checked = c.save_passwd;
+
+            txtPattern.Text = c.pattern;
+            txtProcess.Text = c.process;
+            txtRepl.Text = c.replacement;
+
+            chkCollapse.Checked = ((c.find_flag & Config.FIND_TRAY_COLLAPSED) != 0);
+            chkTray.Checked = ((c.find_flag & Config.FIND_TRAY) != 0);
+            chkTaskbar.Checked = ((c.find_flag & Config.FIND_TASKBAR) != 0);
         }
 
         void Log(string text)
@@ -78,6 +118,7 @@ namespace SteamCloudMusic
             user = client.GetHandler<SteamUser>();
             friends = client.GetHandler<SteamFriends>();
             initCallback();
+            LoadConfig();
         }
 
 
@@ -176,6 +217,7 @@ namespace SteamCloudMusic
                     Log("LoggedOnCallback: ok", Color.LightGreen);
                     loggedIn = true;
                     steamNickname = friends.GetPersonaName();
+                    steamID = callback.ClientSteamID.ToString();
                     UpdateState();
                 }
                 else
@@ -238,7 +280,7 @@ namespace SteamCloudMusic
                     }
                 }
             }
-            if (chktaskbar.Checked)
+            if (chkTaskbar.Checked)
             {
                 foreach (var i in Tray.GetTaskbarIcons())
                 {
@@ -320,7 +362,7 @@ namespace SteamCloudMusic
             {
                 logon.TwoFactorCode = txt2FA.Text;
             }
-
+            SaveConfig();
             Directory.CreateDirectory(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "sentryfiles"));
             FileInfo fi = new FileInfo(System.IO.Path.Combine("sentryfiles", String.Format("{0}.sentryfile", logon.Username)));
 
@@ -340,15 +382,21 @@ namespace SteamCloudMusic
             {
                 worker.CancelAsync();
             }
+            SaveConfig();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            SaveConfig();
             loggedIn = false;
             loop = false;
             client.Disconnect();
             UpdateState();
         }
 
+        private void chkSavePasswd_CheckedChanged(object sender, EventArgs e)
+        {
+            SaveConfig();
+        }
     }
 }
